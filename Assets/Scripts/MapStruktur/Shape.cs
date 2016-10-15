@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 namespace Assets.MapStruktur
 {
-    public class Way
+    public class Shape
     {
 		public ulong Id { get; private set;}
 		public List<Node> Edges { get; private set;}
+		public string Name { get; private set;}
 
-		public Way(osmWay dirtyWay, IDictionary<ulong, Node> nodes)
+		public Shape(osmWay dirtyWay, IDictionary<ulong, Node> nodes)
 		{
 			Id = Id = UInt64.Parse(dirtyWay.id);
 			Edges = new List<Node>();
@@ -17,7 +18,13 @@ namespace Assets.MapStruktur
 				ulong nodeId = UInt64.Parse(dirtyNode.@ref);
 				Edges.Add (nodes[nodeId]);
 			}
-			//TODO Tags
+			foreach(tag dirtyTag in dirtyWay.tag)
+			{
+				if(dirtyTag.k.Equals("name"))
+				{
+					Name = dirtyTag.v;	
+				}
+			}
 		}
     }
 }
